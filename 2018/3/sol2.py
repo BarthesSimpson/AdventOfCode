@@ -1,5 +1,7 @@
 import os
 import re
+import os
+import re
 from collections import Counter
 
 dirname = os.path.dirname(__file__)
@@ -14,7 +16,8 @@ def main():
                              for j in range(c[2], c[2] + c[4]))
         fabric = Counter(s for c in claims for s in squares(c))
 
-        return sum(1 for v in fabric.values() if v > 1)
+        return next(c[0] for c in claims
+                    if all(fabric[s] == 1 for s in squares(c)))
 
 
 print(main())
