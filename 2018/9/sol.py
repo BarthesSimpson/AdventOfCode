@@ -1,10 +1,10 @@
 import os
 import sys
 import re
-from collections import defaultdict
+from collections import defaultdict, deque
 
 dirname = os.path.dirname(__file__)
-INPUT_FILE = './input.txt'
+INPUT_FILE = './input2.txt'
 filepath = os.path.join(dirname, INPUT_FILE)
 
 
@@ -15,21 +15,17 @@ class Solution:
 
     def solve(self):
         self.parse_input()
-        print(self.num_players, self.final_marble)
-        self.circle = [0]
-        self.current_player = 0
-        self.current_marble = 1
-        for i in range(1, self.final_marble + 1):
-            self.make_move(i)
-
-    def make_move(self, i):
-        """
-        Check self.current_player to see who's playing
-        Check self.current_marble to see where to insert
-        Check the rules to see whether to insert and how
-        to update the grid and self.scores[current_player]
-        """
-        pass
+        self.circle = deque([0])
+        for marble in range(1, self.final_marble + 1):
+            if marble % 23 == 0:
+                self.circle.rotate(7)
+                self.scores[marble %
+                            self.num_players] += marble + self.circle.pop()
+                self.circle.rotate(-1)
+            else:
+                self.circle.rotate(-1)
+                self.circle.append(marble)
+        return max(self.scores.values())
 
     def parse_input(self):
         with open(self.filepath, 'r') as f:
